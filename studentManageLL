@@ -1,9 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+#include<stdlib.h>
 
 typedef struct Student {
-    char name[5];
+    char name[7];
     int birth;
     int phone;
     char address[30];
@@ -16,21 +17,45 @@ sdt* createNode() {
     sdt* temp = (sdt*)malloc(sizeof(sdt));
     temp->next = NULL;
     printf("\n이름 : ");
-    scanf("%s", &temp->name);
+    scanf("%s", temp->name);
     printf("\n생년월일 : ");
     scanf("%d", &temp->birth);
     printf("\n전화번호 : ");
     scanf("%d", &temp->phone);
     printf("\n주소 : ");
-    scanf("%s", &temp->address);
+    scanf("%s", temp->address);
     printf("\n모 : ");
-    scanf("%s", &temp->mother);
+    scanf("%s", temp->mother);
     printf("\n부 : ");
-    scanf("%s", &temp->father);
+    scanf("%s", temp->father);
 
     return temp;
 
 }
+
+
+void searchProfile(sdt * head) {
+    char name[7];
+    int cnt =0;
+    printf("\n대상학생의 이름을 입력해주세요. : ");
+    scanf("%s",&name);
+    sdt* curr = head;
+    if (head->next == NULL) { printf("\n학생 프로필이 존재하지 않습니다.\n"); return -1;}
+    while (curr->next != NULL){
+        curr = curr->next;
+        if (strcmp(curr->name,name)==0) {
+            cnt++;
+            printf("\n이름 : %s",curr->name);
+            printf("\n생년월일 : %d", curr->birth);
+            printf("\n전화번호 : %d", curr->phone);
+            printf("\n주소 : %s", curr->address);
+            printf("\n모 : %s", curr->mother);
+            printf("\n부 : %s\n", curr->father);
+        }
+    }
+    printf("\n%d명의 학생을 찾았습니다.", cnt);
+}
+
 
 void addProfile(sdt* head) {
     sdt* newprofile = createNode();
@@ -61,12 +86,53 @@ void printProfile(sdt* head) {
     printf("NULL\n");
 }
 
+void deleteProfile(sdt* head) {
+    
+    sdt* temp = (sdt*)malloc(sizeof(sdt));
+    temp->next = NULL;
+    printf("\n---------------------------------\n삭제할 프로필의 정보를 입력해주세요.\n---------------------------------");
+    printf("\n이름 : ");
+    scanf("%s", temp->name);    
+    printf("\n생년월일 : ");
+    scanf("%d", &temp->birth);
+    printf("\n전화번호 : ");
+    scanf("%d", &temp->phone);
+    printf("\n주소 : ");
+    scanf("%s", temp->address);    
+    printf("\n모 : ");
+    scanf("%s", temp->mother);  
+    printf("\n부 : ");
+    scanf("%s", temp->father);  
+
+    sdt* curr = head->next;
+    sdt* pre = head;
+    if (head->next == NULL) { printf("\n학생 프로필이 존재하지 않습니다.\n"); return; }
+    while (curr != NULL) {
+        if (strcmp(curr->name, temp->name) == 0 &&
+            curr->birth == temp->birth &&
+            curr->phone == temp->phone &&
+            strcmp(curr->address, temp->address) == 0 &&
+            strcmp(curr->father, temp->father) == 0 &&
+            strcmp(curr->mother, temp->mother) == 0) {
+            pre->next = curr->next;
+            free(curr);
+            printf("성공적으로 삭제되었습니다.");
+            return;
+        }
+        pre = curr;
+        curr = curr->next;
+    }
+    printf("해당 프로필은 존재하지 않습니다.");
+    free(temp);
+}
+
+
 int main() {
     int num;
     sdt* head = (sdt*)malloc(sizeof(sdt));
     head->next = NULL;
     while (1) {
-        printf("---------------------------------\n     학생프로필 리스트 : 1\n      학생프로필 검색 : 2\n      학생프로필 삭제 : 3\n      학생프로필 추가 : 4\n---------------------------------\n");
+        printf("\n---------------------------------\n     학생프로필 리스트 : 1\n      학생프로필 검색 : 2\n      학생프로필 삭제 : 3\n      학생프로필 추가 : 4\n---------------------------------\n");
         scanf("%d", &num);
         switch (num) {
         case 4:
@@ -74,6 +140,12 @@ int main() {
             break;
         case 1:
             printProfile(head);
+            break;
+        case 2:
+            searchProfile(head);
+            break;
+        case 3:
+            deleteProfile(head);
             break;
 
         }
