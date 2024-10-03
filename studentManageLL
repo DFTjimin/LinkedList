@@ -1,0 +1,82 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Student {
+    char name[5];
+    int birth;
+    int phone;
+    char address[30];
+    char mother[10];
+    char father[10];
+    struct Student* next;
+}sdt;
+
+sdt* createNode() {
+    sdt* temp = (sdt*)malloc(sizeof(sdt));
+    temp->next = NULL;
+    printf("\n이름 : ");
+    scanf("%s", &temp->name);
+    printf("\n생년월일 : ");
+    scanf("%d", &temp->birth);
+    printf("\n전화번호 : ");
+    scanf("%d", &temp->phone);
+    printf("\n주소 : ");
+    scanf("%s", &temp->address);
+    printf("\n모 : ");
+    scanf("%s", &temp->mother);
+    printf("\n부 : ");
+    scanf("%s", &temp->father);
+
+    return temp;
+
+}
+
+void addProfile(sdt* head) {
+    sdt* newprofile = createNode();
+    if (head->next == NULL) {
+        head->next = newprofile;
+    }
+    else {
+        sdt* curr = head;
+        while (curr->next != NULL) {
+            curr = curr->next;
+        }
+        curr->next = newprofile;
+    }
+}
+
+void printProfile(sdt* head) {
+    if (head->next == NULL) { printf("\n학생 프로필이 없습니다.\n"); return -1; }
+    sdt* temp = head->next;
+    while (temp != NULL) {
+        printf("\n이름 : %s", temp->name);
+        printf("\n생년월일 : %d", temp->birth);
+        printf("\n전화번호 : %d", temp->phone);
+        printf("\n주소 : %s", temp->address);
+        printf("\n모 : %s", temp->mother);
+        printf("\n부 : %s\n", temp->father);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int num;
+    sdt* head = (sdt*)malloc(sizeof(sdt));
+    head->next = NULL;
+    while (1) {
+        printf("---------------------------------\n     학생프로필 리스트 : 1\n      학생프로필 검색 : 2\n      학생프로필 삭제 : 3\n      학생프로필 추가 : 4\n---------------------------------\n");
+        scanf("%d", &num);
+        switch (num) {
+        case 4:
+            addProfile(head);
+            break;
+        case 1:
+            printProfile(head);
+            break;
+
+        }
+    }
+
+}
